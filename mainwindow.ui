@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>800</height>
+    <width>202</width>
+    <height>197</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Method Monte-Carlo</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QWidget" name="widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -93,7 +93,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>202</width>
      <height>25</height>
     </rect>
    </property>

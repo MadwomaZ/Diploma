@@ -4,7 +4,7 @@ QPaintWidget::QPaintWidget(Surface *s_, QWidget *parent) : QWidget(parent), time
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(updateSurface()));
 //    parent->connect(&stage, SIGNAL(timer.timeout()), this, SLOT(updateSurface());
-    timer.start(1);
+    timer.start(1000);
 }
 
 void QPaintWidget::updateSurface()
@@ -17,11 +17,13 @@ void QPaintWidget::updateSurface()
     case 1:
     {
 //        s->initial_distribution(10, s->substance1);
+//        s->get_element_by_common_index(15)->set_node_state(1);
         break;
     }
     case 2:
     default:
 //        s->selection_process_for_surface();
+//        s->get_element_by_common_index(15)->migration();
         s->selection_process_for_node();
 //        s->adsorption(s->substance2);
 //        s->desorption();
@@ -47,7 +49,7 @@ void QPaintWidget::paintEvent(QPaintEvent */*, Surface * s*/)
     qreal max_x = (s->get_number_of_nodes_in_x() - 1) * POINT_GAP;
     for (size_t i = 0; i < s->get_number_of_nodes_in_y(); i++)
     {
-        for (size_t j = 0; j < s->get_number_of_nodes_in_x(); j++)
+        for (size_t j = 0; j < s->get_number_of_nodes_in_x()-1; j++)
         {
             if (s->get_element_in_surface(i, j)->get_node_state() == s->do_not_use)
             {
@@ -85,6 +87,7 @@ void QPaintWidget::paintEvent(QPaintEvent */*, Surface * s*/)
             //}
         }
     }
+
 //    pix.drawLine(max_x, 4 * 3, max_x, 54 * 3);
     //    pix.begin(ui->centralWidget);
     //    qDebug() << parentWidget();

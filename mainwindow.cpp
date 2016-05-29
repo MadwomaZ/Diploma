@@ -39,11 +39,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    s = new Surface(100, 100);
+    s = new Surface(7, 7);
     wgt = new QPaintWidget(s, this);
 //    qDebug() << ui->centralWidget->layout();
 //    ui->horizontalLayout->addWidget(wgt);
     ui->widget->layout()->addWidget(wgt);
+//    ui->xEdit->setText(QString::number(90));
 
 //    wgt->show();
 //    ui->centralWidget->layout()->addWidget(wgt);
