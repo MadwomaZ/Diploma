@@ -3,13 +3,15 @@
 QPaintWidget::QPaintWidget(Surface *s_, QWidget *parent) : QWidget(parent), timer(this), s(s_), stage(0)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(updateSurface()));
+//    connect(&stage, SIGNAL(changevalue()), this, SLOT()
 //    parent->connect(&stage, SIGNAL(timer.timeout()), this, SLOT(updateSurface());
-    timer.start(1000);
+    timer.start(1);
 }
 
 void QPaintWidget::updateSurface()
 {
 //    std::cout << "animate call! stage = " << stage << std::endl;
+
     switch (stage)
     {
     case 0:
@@ -31,7 +33,7 @@ void QPaintWidget::updateSurface()
         break;
     }
 //    std::cout << stage << std::endl;
-//    if (stage % 100 == 0 || stage == 1)
+    if (stage % 100 == 0 || stage == 1)
         QWidget::update();
     ++stage;
 /*    if (stage == 3)
@@ -46,10 +48,10 @@ void QPaintWidget::paintEvent(QPaintEvent */*, Surface * s*/)
     QPainter pix(this);
     const qreal tan30 = 0.5;//tan(M_PI / 6.0);
 //    std::cout << "tan=" << tan30 << std::endl;
-    qreal max_x = (s->get_number_of_nodes_in_x() - 1) * POINT_GAP;
+    qreal max_x = (s->get_number_of_nodes_in_x() /*- 1*/) * POINT_GAP;
     for (size_t i = 0; i < s->get_number_of_nodes_in_y(); i++)
     {
-        for (size_t j = 0; j < s->get_number_of_nodes_in_x()-1; j++)
+        for (size_t j = 0; j < s->get_number_of_nodes_in_x(); j++)
         {
             if (s->get_element_in_surface(i, j)->get_node_state() == s->do_not_use)
             {

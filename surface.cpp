@@ -11,7 +11,7 @@ Surface::Surface(): number_of_nodes_in_x(22), number_of_nodes_in_y(31)
     set_all_delta_t_j();
 }
 
-Surface::Surface(unsigned int x, unsigned int y): number_of_nodes_in_x(x), number_of_nodes_in_y(y)
+Surface::Surface(unsigned int x, unsigned int y): number_of_nodes_in_x(x/3*3), number_of_nodes_in_y(y/3*3)
 {
     set_all_free_nodes();
     set_all_nodes();
@@ -117,8 +117,9 @@ unsigned int Surface::get_boundary_conditions (int i, int size)
 void Surface::set_first_neighbors (Node * node, int array_i, int array_j) //Устанавливаем первых соседей для node[array_i][array_j]
 {
     /*cout << "Первые соседи для узла [" << array_i << "][" << array_j << "] = " \
-         << its_surface[array_i][array_j]->get_node_state() << " :" << endl;
-*/
+         << its_surface[array_i][array_j]->get_node_state() << " :" << endl;*/
+    //Можно сделать проверку на то, что если state == do_no_use, то все соседи устанавливаем в ноль.
+
     if (its_surface[get_boundary_conditions(array_i - 1, number_of_nodes_in_y)][array_j]->get_node_state() != do_not_use)
     {
 
@@ -128,35 +129,34 @@ void Surface::set_first_neighbors (Node * node, int array_i, int array_j) //Ус
         node->set_first_neighbors(its_surface[get_boundary_conditions(array_i + 1, number_of_nodes_in_y)] \
                 [get_boundary_conditions(array_j - 1, number_of_nodes_in_x)]);//up
 
-        /*cout << "[" << get_boundary_conditions(array_i - 1, number_of_nodes_in_y) << "][" << array_j << "] = " \
+        /*cout << "[" << array_i << "][" << get_boundary_conditions(array_j + 1, number_of_nodes_in_x) << "] = " \
+             << its_surface[array_i][get_boundary_conditions(array_j + 1, number_of_nodes_in_x)]->get_node_state()  << endl;
+        cout << "[" << get_boundary_conditions(array_i - 1, number_of_nodes_in_y) << "][" << array_j << "] = " \
              << its_surface[get_boundary_conditions(array_i - 1, number_of_nodes_in_y)][array_j]->get_node_state()  << endl;
         cout << "[" << get_boundary_conditions(array_i + 1, number_of_nodes_in_y) << "]["
              << get_boundary_conditions(array_j - 1, number_of_nodes_in_x) << "] = " \
              << its_surface[get_boundary_conditions(array_i + 1, number_of_nodes_in_y)] \
-                [get_boundary_conditions(array_j - 1, number_of_nodes_in_x)]->get_node_state()  << endl;
+                [get_boundary_conditions(array_j - 1, number_of_nodes_in_x)]->get_node_state()  << endl;*/
 
-        cout << "[" << array_i << "][" << get_boundary_conditions(array_j + 1, number_of_nodes_in_x) << "] = " \
-             << its_surface[array_i][get_boundary_conditions(array_j + 1, number_of_nodes_in_x)]->get_node_state()  << endl;
-        */
+
     }
     else
     {
 
-        node->set_first_neighbors(its_surface[get_boundary_conditions(array_i + 1, number_of_nodes_in_y)][array_j]);//rigth
-
+        node->set_first_neighbors(its_surface[get_boundary_conditions(array_i + 1, number_of_nodes_in_y)][array_j]);//right
         node->set_first_neighbors(its_surface[array_i][get_boundary_conditions(array_j - 1, number_of_nodes_in_x)]);//left
-
         node->set_first_neighbors(its_surface[get_boundary_conditions(array_i - 1, number_of_nodes_in_y)] \
                 [get_boundary_conditions(array_j + 1, number_of_nodes_in_x)]);//up
-        /*   cout << "[" << get_boundary_conditions(array_i - 1, number_of_nodes_in_y) << "]["
+
+        /*cout << "[" << get_boundary_conditions(array_i + 1, number_of_nodes_in_y) << "][" << array_j << "] = " \
+             << its_surface[get_boundary_conditions(array_i + 1, number_of_nodes_in_y)][array_j]->get_node_state() << endl;
+        cout << "[" << array_i << "][" << get_boundary_conditions(array_j - 1, number_of_nodes_in_x) << "] = " \
+             << its_surface[array_i][get_boundary_conditions(array_j - 1, number_of_nodes_in_x)]->get_node_state() << endl;
+        cout << "[" << get_boundary_conditions(array_i - 1, number_of_nodes_in_y) << "]["
              << get_boundary_conditions(array_j + 1, number_of_nodes_in_x) << "] = " \
              << its_surface[get_boundary_conditions(array_i - 1, number_of_nodes_in_y)] \
-                [get_boundary_conditions(array_j - 1, number_of_nodes_in_x)]->get_node_state() << endl;
-              cout << "[" << get_boundary_conditions(array_i + 1, number_of_nodes_in_y) << "][" << array_j << "] = " \
-             << its_surface[get_boundary_conditions(array_i + 1, number_of_nodes_in_y)][array_j]->get_node_state() << endl;
-              cout << "[" << array_i << "][" << get_boundary_conditions(array_j - 1, number_of_nodes_in_x) << "] = " \
-             << its_surface[array_i][get_boundary_conditions(array_j - 1, number_of_nodes_in_x)]->get_node_state() << endl;
-*/
+                [get_boundary_conditions(array_j - 1, number_of_nodes_in_x)]->get_node_state() << endl;*/
+
     }
 }
 void Surface::set_second_neighbors (Node * node, int array_i, int array_j)
@@ -395,15 +395,9 @@ void Surface::selection_process_for_node()//Здесь происходит вы
 //    cout << "selection_process" << endl;
 //    double v_ad = 0.3, v_des = 0.3, v_mig = 0.4;
     Node * n = select_node(); //Выбор ноды с минимальным временем пребывания в ячейке
-//    cout << "select node with state = " << n->get_node_state() << " x= " << n->get_x_index() << " y = " << n->get_y_index() << endl;
-//    n->velocity_calculation(); //расчет скоростей
-//    cout << "selection_process 1 vsumm = " << get_v_summ() << endl;
-//    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-//    mt19937 r (seed);
-//    double d = generator_without_limitation();
+//    cout << "select node with state = " << n->get_node_state() << " x= "
+//         << n->get_x_index() << " y = " << n->get_y_index() << endl;
     double gener = generator_null_one() * n->get_v_summ();
-//    double gener = 0.1;
-//    cout << "selection_process 2" << endl;
     /*cout << "V_ad = " << n->get_v_adsorpion() << " V_des = " << n->get_v_desorpion()
          << " V_mig = " << n->get_v_migration()  << " gener = " << gener << endl << endl;*/
     if (gener <= n->get_v_adsorpion())
@@ -429,6 +423,9 @@ void Surface::selection_process_for_node()//Здесь происходит вы
     else {
         cout << "----------------------------------------no process" << endl;
     }
+    if (n->get_node_state() != free_place)
+        all_free_nodes--;
+//    cout << get_all_free_nodes() << endl;
 }
 
 void Surface::selection_process_for_surface()
@@ -465,6 +462,7 @@ void Surface::selection_process_for_surface()
     else {
         cout << "no process" << endl;
     }
+
 }
 
 void Surface::set_all_delta_t_j()//расчет времени пребывания для всех узлов
@@ -474,12 +472,12 @@ void Surface::set_all_delta_t_j()//расчет времени пребыван�
     {
         for (size_t j = 0; j < number_of_nodes_in_x; j++)
         {
-            if (its_surface[i][j]->get_v_summ() != 0)
                 its_surface[i][j]->set_delta_t_j();
-            else
-                break;
-            /*cout << "[" << i << "][" << j << "] state = " << its_surface[i][j]->get_node_state() <<
-                    " delta_t_j = " << its_surface[i][j]->get_delta_t_j() << endl;*/
+//            if (its_surface[i][j]->get_node_state() != do_not_use)
+//                cout << "[" << i << "][" << j << "] state = " << its_surface[i][j]->get_node_state() <<
+//                        " delta_t_j = " << its_surface[i][j]->get_delta_t_j() << endl;
+//            else
+//                break;
         }
     }
 }
@@ -507,9 +505,9 @@ Node *Surface::select_node() // находит ноду с минимальны�
             if (its_surface[i][j]->get_node_state() == do_not_use)
             {
 //                cout << "select node called" << endl;
-                break;
+                continue;
             }
-            if (its_surface[i][j]->get_delta_t_j() <= min_t)
+            if (its_surface[i][j]->get_delta_t_j() <= min_t && its_surface[i][j]->get_delta_t_j() != 0)
             {
                 if (its_surface[i][j]->get_v_summ() != 0)
                 {
@@ -519,13 +517,15 @@ Node *Surface::select_node() // находит ноду с минимальны�
                 }
                 else
                 {
-                    break;
+                    continue;
                 }
             }
         }
     }
-    /*cout << "RESULT: mit_t = " << min_t << "[" << result->get_x_index() << "]["<< result->get_y_index() << "] = "
-         << result->get_node_state() << " v_mig = " << result->get_v_migration() << " v_ad = " << result->get_v_adsorpion()
-         << endl;*/
+//    cout << "----------------- select node begin -----------------" << endl;
+//    cout << "RESULT: mit_t = " << min_t << " for [" << result->get_x_index() << "]["<< result->get_y_index() << "] = "
+//         << result->get_node_state() << " v_mig = " << result->get_v_migration() << " v_ad = " << result->get_v_adsorpion()
+//         << endl;
+//    cout << "----------------- select node end -----------------" << endl;
     return result;
 }
