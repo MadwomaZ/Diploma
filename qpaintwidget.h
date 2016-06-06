@@ -6,6 +6,9 @@
 #include <QDebug>
 #include <QTimer>
 #include </home/madwomaz/Coding/Diplom_model_poverchnosty_oop/node.h>
+#include <mutex>
+
+extern std::mutex g_mtx;
 
 class QPaintEvent;
 
@@ -17,6 +20,7 @@ public:
     int getStage() {return stage;}
 public slots:
     void updateSurface();
+    void drawSurface();
 
 protected:
     QTimer timer;
