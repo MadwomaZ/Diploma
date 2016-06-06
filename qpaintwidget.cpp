@@ -23,7 +23,8 @@ void QPaintWidget::drawSurface()
         {
             for (size_t j = 0; j < s->get_number_of_nodes_in_x(); j++)
             {
-                if (s->get_element_in_surface(i, j)->get_node_state() == s->do_not_use)
+                Surface::host_state current_state = s->get_element_in_surface(i, j)->get_node_state();
+                if (current_state == s->do_not_use)
                 {
                     pix.setPen(QPen(Qt::black, pointsize));
                 }
@@ -31,17 +32,17 @@ void QPaintWidget::drawSurface()
                 {
                     pix.setPen(QPen(Qt::black, pointsize));
                 }
-                if (s->get_element_in_surface(i, j)->get_node_state() == s->substance1)
+                if (current_state == s->substance1)
                 {
                     pix.setPen(QPen(Qt::white, pointsize));
                 }
-                if (s->get_element_in_surface(i, j)->get_node_state() == s->substance2)
-                {
-                    pix.setPen(QPen(Qt::blue, pointsize));
-                }
+//                if (s->get_element_in_surface(i, j)->get_node_state() == s->substance2)
+//                {
+//                    pix.setPen(QPen(Qt::blue, pointsize));
+//                }
 
-                qreal x = 5 + POINT_GAP * tan30 * (qreal)j + i * POINT_GAP;
-                qreal y = 5 + j * POINT_GAP;
+                qreal x = 4 + POINT_GAP * tan30 * (qreal)j + i * POINT_GAP;
+                qreal y = 4 + j * POINT_GAP;
     //            if (i == 0)
     //                std::cout << x << " " << y << std::endl;
                 if (x <= max_x)
@@ -59,22 +60,6 @@ void QPaintWidget::drawSurface()
                 //}
             }
         }
-
-    //    pix.drawLine(max_x, 4 * 3, max_x, 54 * 3);
-        //    pix.begin(ui->centralWidget);
-        //    qDebug() << parentWidget();
-        //    qDebug() << this;
-        //    pix.setPen(QPen(Qt::black, pointsize));
-        //    unsigned int n = 6;//шестиугольник в виде точек
-        //    for(size_t i = 0; i < n; i++)
-        //    {
-        //        qreal fAngle = 2 * 3.14 * i / n;
-        //        qreal x = 5 + cos(fAngle) * 4;
-        //        qreal y = 5 + sin(fAngle) * 4;
-        //        pix.drawPoint(QPointF(x, y));
-        //    }
-    //g_mtx.unlock();
-  //  std::cout << "draw end" << std::endl;
 }
 
 void QPaintWidget::updateSurface()
@@ -103,9 +88,10 @@ void QPaintWidget::updateSurface()
 //    }
 //    std::cout << stage << std::endl;
 //    drawSurface();
-    if (stage % 100 == 0 || stage == 1)
+    if (iterations % 100 == 0 || iterations == 1)
+//    if (stage % 100 == 0 || stage == 1)
         QWidget::update();
-    ++stage;
+//    ++stage;
 /*    if (stage == 3)
         stage = 0;*/
 }

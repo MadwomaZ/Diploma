@@ -2,14 +2,14 @@
 #include "ui_mainwindow.h"
 
 Surface g_surface(200, 200);
-std::mutex g_mtx;
+//std::mutex g_mtx;
 
 void MainWindow::okClickBtn()
 {
     QString * str = new QString;
 //    current_iter++;
     str->append("Iteration = ");
-    str->append(QString::number(wgt->getStage()));
+    str->append(QString::number(iterations));
     ui->iteration->setText(* str);
 
     delete str;

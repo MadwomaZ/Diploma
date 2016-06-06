@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <mutex>
+//#include <mutex>
 #include <QMainWindow>
 #include <QAbstractButton>
 #include <QDebug>
@@ -14,7 +14,8 @@
 #include </home/madwomaz/Coding/Diplom_model_poverchnosty_oop/surface.h>
 
 extern Surface g_surface;
-extern std::mutex g_mtx;
+//extern unsigned int iterations;
+//extern std::mutex g_mtx;
 
 namespace Ui {
 class MainWindow;

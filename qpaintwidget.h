@@ -8,7 +8,8 @@
 #include </home/madwomaz/Coding/Diplom_model_poverchnosty_oop/node.h>
 #include <mutex>
 
-extern std::mutex g_mtx;
+//extern std::mutex g_mtx;
+extern unsigned int iterations;
 
 class QPaintEvent;
 
