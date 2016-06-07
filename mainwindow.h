@@ -27,6 +27,7 @@ class MainWindow : public QMainWindow
     //    QPixmap * gr = new QPixmap;
     //    QMovie * move = new QMovie(qobject_cast() );
     //    QObject obj = new
+    QTimer *timer;
 public:
     void okClickBtn();
     void SaveClickBtn();
@@ -35,6 +36,7 @@ public:
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
+    void updateGraph();
 
 private:
     Ui::MainWindow *ui;
