@@ -107,13 +107,13 @@ void MainWindow::on_buttonBox_clicked(QAbstractButton *button)
 void MainWindow::updateGraph()
 {
     ui->iterations->setText(QString::number(iterations));
-    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
-    ui->graph_adsorption->xAxis->setRange(0, *(g_surface.all_time.end() - 1));
-    ui->concentration->setText(QString::number(*(g_surface.concentration.end() - 1)));
-    ui->all_time->setText(QString::number(*(g_surface.all_time.end() - 1)));
+//    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
+//    ui->graph_adsorption->xAxis->setRange(0, *(g_surface.all_time.end() - 1));
+//    ui->concentration->setText(QString::number(*(g_surface.concentration.end() - 1)));
+//    ui->all_time->setText(QString::number(*(g_surface.all_time.end() - 1)));
     if (iterations == 1e6 || *(g_surface.concentration.end() - 1) >= 1)
     {
         timer->stop();
     }
-    ui->graph_adsorption->replot();
+//    ui->graph_adsorption->replot();
 }
