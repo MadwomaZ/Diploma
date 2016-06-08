@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QTimer>
-#include </home/madwomaz/Coding/Diplom_model_poverchnosty_oop/node.h>
+#include <node.h>
 #include <mutex>
 
 //extern std::mutex g_mtx;
