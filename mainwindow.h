@@ -11,7 +11,7 @@
 #include <QGraphicsObject>
 //#include <QPainter>
 #include "qpaintwidget.h"
-#include </home/madwomaz/Coding/Diplom_model_poverchnosty_oop/surface.h>
+#include <surface.h>
 
 extern Surface g_surface;
 //extern unsigned int iterations;

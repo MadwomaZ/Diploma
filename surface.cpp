@@ -32,6 +32,21 @@ Surface::~Surface()
     }
 }
 
+std::vector<std::vector<Surface::host_state> > Surface::getStates()
+{
+    std::vector<std::vector<Surface::host_state> > ret;
+    ret.resize(number_of_nodes_in_y);
+    for (size_t i = 0; i < number_of_nodes_in_y; ++i)
+    {
+        ret[i].resize(number_of_nodes_in_x);
+        for (size_t j = 0; j < number_of_nodes_in_x; ++j)
+        {
+            ret[i][j] = get_element_in_surface(i, j)->get_node_state();
+        }
+    }
+    return ret;
+}
+
 void Surface::set_number_of_nodes_in_x(int x)
 {
     number_of_nodes_in_x = x;
@@ -103,7 +118,7 @@ void Surface::print_surface()
         std::cout << std::endl;
     }
 }
-unsigned int Surface::get_boundary_conditions (int i, int size)
+unsigned int Surface::get_boundary_conditions (int i, int size) const
 {
     if (i < 0)
         return size + i - ((size) % 3);
@@ -248,7 +263,7 @@ Node *Surface::get_element_by_common_index(unsigned int index)
                 nullptr;
 }
 
-void Surface::adsorption(unsigned int new_state)
+void Surface::adsorption(Surface::host_state new_state)
 {
 //    cout << "Adsorption" << endl;
 //    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
@@ -279,7 +294,7 @@ void Surface::desorption() //Процесс десорбции
 }
 
 //Процесс начального заполнения поверхности, та же адсорбция, только тут несколько процессов адсорбции и сразу
-void Surface::initial_distribution(unsigned int amount_of_particles, unsigned int new_state)
+void Surface::initial_distribution(unsigned int amount_of_particles, Surface::host_state new_state)
 {
     //    unsigned int index = 0;
     while(amount_of_particles > 0)
@@ -395,15 +410,23 @@ void Surface::selection_process_for_node()//Здесь происходит вы
 //    cout << "selection_process" << endl;
 //    double v_ad = 0.3, v_des = 0.3, v_mig = 0.4;
     Node * n = select_node(); //Выбор ноды с минимальным временем пребывания в ячейке
+//    cout << "delta_t_j = " << n->get_delta_t_j() << endl;
 //    cout << "select node with state = " << n->get_node_state() << " x= "
 //         << n->get_x_index() << " y = " << n->get_y_index() << endl;
     double gener = generator_null_one() * n->get_v_summ();
     /*cout << "V_ad = " << n->get_v_adsorpion() << " V_des = " << n->get_v_desorpion()
          << " V_mig = " << n->get_v_migration()  << " gener = " << gener << endl << endl;*/
+    bool process_completed = false;
     if (gener <= n->get_v_adsorpion())
     {
-
-        n->adsorption(1);
+        if (n->adsorption(Surface::substance1) == 0)
+        {
+            process_completed = true;
+        }
+        else
+        {
+            process_completed = false;
+        }
 //        print_surface();
     }
 //    else if (gener <= n->get_v_adsorpion() + n->get_v_desorpion())
@@ -417,14 +440,44 @@ void Surface::selection_process_for_node()//Здесь происходит вы
 //    if (gener <= n->get_v_migration())
     {
 //        cout << "case 3" << endl;
-        n->migration();
+        if (n->migration() == 0)
+        {
+            process_completed = true;
+//            cout << "migration completed" << endl;
+        }
+        else
+        {
+            process_completed = false;
+        }
 //        print_surface();
     }
     else {
+        process_completed = false;
         cout << "----------------------------------------no process" << endl;
     }
-    if (n->get_node_state() != free_place)
-        all_free_nodes--;
+    if (process_completed && n->get_delta_t_j() > 0)
+    {
+        total_time += n->get_delta_t_j();
+        all_time.push_back(total_time);
+        unsigned int number_of_occupied_nodes = 0;
+        for (size_t i = 0 ; i < number_of_nodes_in_y; i++)
+        {
+            for (size_t j = 0; j < number_of_nodes_in_x; j++)
+            {
+                if (its_surface[i][j]->get_node_state() != do_not_use && its_surface[i][j]->get_node_state() != free_place)
+                {
+                    number_of_occupied_nodes++;
+                }
+            }
+        }
+//        cout << "Количество занятых мест = " << number_of_occupied_nodes << endl;
+//        cout << "Концентрация = " << number_of_occupied_nodes << '/' << all_free_nodes << '=' << (double) number_of_occupied_nodes/all_free_nodes << endl;
+        concentration.push_back((double)number_of_occupied_nodes/all_free_nodes);
+        number_of_occupied_nodes = 0;
+//        cout << "all_time : " << *(all_time.end() - 1) << "  C = " << *(concentration.end() - 1) << endl;
+    }
+//    if (n->get_node_state() != free_place)
+//        all_free_nodes--;
 //    cout << get_all_free_nodes() << endl;
 }
 
@@ -443,7 +496,7 @@ void Surface::selection_process_for_surface()
     if (gener <= v_adsorpion_surface) //и не равно 0
     {
 //        cout << "case 1" << endl;
-        adsorption(1);
+        adsorption(Surface::substance1);
 //        print_surface();
     }
 //    else if (gener <= v_adsorpion_surface + v_desorpion_surface)

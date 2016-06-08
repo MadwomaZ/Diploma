@@ -15,17 +15,17 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     qpaintwidget.cpp \
-    ../Diplom_model_poverchnosty_oop/node.cpp \
-    ../Diplom_model_poverchnosty_oop/surface.cpp \
-    ../Diplom_model_poverchnosty_oop/generator.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    generator.cpp \
+    node.cpp \
+    surface.cpp
 
 HEADERS  += mainwindow.h \
     qpaintwidget.h \
-    ../Diplom_model_poverchnosty_oop/node.h \
-    ../Diplom_model_poverchnosty_oop/surface.h \
-    ../Diplom_model_poverchnosty_oop/generator.h \
-    qcustomplot.h
+    qcustomplot.h \
+    generator.h \
+    node.h \
+    surface.h
 
 FORMS    += mainwindow.ui
 

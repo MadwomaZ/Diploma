@@ -8,7 +8,7 @@
 class Node
 {
 private:
-    int its_node_state; //состояние узла
+    Surface::host_state its_node_state; //состояние узла
     unsigned int common_index = 0;
     unsigned int x_index = 0;
     unsigned int y_index = 0;
@@ -56,10 +56,10 @@ private:
     std::vector <Node *> second_neighbors;
 
 public:
-    Node():its_node_state(0) {}
+    Node():its_node_state(Surface::free_place) {}
     ~Node() {}
-    inline unsigned int get_node_state() {return its_node_state;}
-    inline void set_node_state(int new_state) {its_node_state = new_state;}
+    inline Surface::host_state get_node_state() {return its_node_state;}
+    inline void set_node_state(Surface::host_state new_state) {its_node_state = new_state;}
     inline void set_first_neighbors(Node * node) {first_neighbors.push_back(node);} //={right, left, up}
     inline void set_second_neighbors(Node *node) {second_neighbors.push_back(node);}
     inline std::vector <Node *> get_first_neighbors() {return first_neighbors;}
@@ -87,8 +87,8 @@ public:
     inline void set_y_index (unsigned int index) {y_index = index;}
     inline unsigned int get_common_index() {return common_index;}
     inline void set_common_index(unsigned int index) {common_index = index;}
-    void migration ();
-    void adsorption(unsigned int new_state);
+    int migration();
+    int adsorption(Surface::host_state new_state);
     void set_delta_t_j ();
 
 };

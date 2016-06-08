@@ -201,7 +201,7 @@ void Node::velocity_calculation() //Эта функция для расчета 
 //    cout << "-------------------------------------velocity calc end-----------------------------------------------" << endl;
 }
 
-void Node::migration()
+int Node::migration()
 {
 //    cout << "Migration" << endl;
 //    velocity_calculation();
@@ -221,7 +221,7 @@ void Node::migration()
     {
 //        cout << "the migration process is not =((" << endl;
 //        cout << "num_neigh = " << num_first_neighbors << " state = " << get_node_state() << endl;
-        return;
+        return -1;
     }
 //    cout << "num_first = " << num_first_neighbors << endl;
     double v_current = generator_null_one() * v_migration_all;
@@ -264,20 +264,24 @@ void Node::migration()
     }
     else {
         cout << "----------------------------------------no migaration" << endl;
+        return -1;
     }
+    return 0;
 }
 
-void Node::adsorption(unsigned int new_state)
+int Node::adsorption(Surface::host_state new_state)
 {
     if (its_node_state == Surface::free_place)
     {
 //        cout << "Adsorption for [" << x_index << "][" << y_index << "] = " << its_node_state << " --> ";
         set_node_state(new_state);
+        return 0;
 //        cout  << "[" << x_index << "][" << y_index << "] = " << its_node_state << endl;
     }
     else
     {
         cout << "----------------------------------------no adsorption" << endl;
+        return -1;
     }
 }
 
