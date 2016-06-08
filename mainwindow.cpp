@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     wgt = new QPaintWidget(&g_surface, this);
     timer = new QTimer(this);
     connect(timer, SIGNAL( timeout() ), this, SLOT(updateGraph()) );
-    timer->start(100);
+    timer->start(0);
 //    qDebug() << ui->centralWidget->layout();
 //    ui->horizontalLayout->addWidget(wgt);
 //    ui->label_2->setText(QString::number(g_surface.get_all_free_nodes()));
@@ -106,12 +106,12 @@ void MainWindow::on_buttonBox_clicked(QAbstractButton *button)
 
 void MainWindow::updateGraph()
 {
-    ui->iterations->setText(QString::number(iterations));
+    ui->iterations->setText(QString::number(g_iterations));
 //    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
 //    ui->graph_adsorption->xAxis->setRange(0, *(g_surface.all_time.end() - 1));
 //    ui->concentration->setText(QString::number(*(g_surface.concentration.end() - 1)));
 //    ui->all_time->setText(QString::number(*(g_surface.all_time.end() - 1)));
-    if (iterations == 1e6 || *(g_surface.concentration.end() - 1) >= 1)
+    if (g_iterations == 1e6 || *(g_surface.concentration.end() - 1) >= 1)
     {
         timer->stop();
     }

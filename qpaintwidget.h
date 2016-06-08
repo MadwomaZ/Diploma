@@ -9,7 +9,7 @@
 #include <mutex>
 
 //extern std::mutex g_mtx;
-extern unsigned int iterations;
+extern unsigned int g_iterations;
 
 class QPaintEvent;
 
@@ -28,6 +28,7 @@ protected:
     void paintEvent(QPaintEvent */*, Surface *s*/);
 private:
     Surface *s;
+    std::vector<std::vector<Surface::host_state> > s2d;
     int stage;
 //    bool selectPen(Surface * s);
 };

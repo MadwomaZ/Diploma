@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 bool volatile g_run = true;
-unsigned int iterations = 0;
+unsigned int g_iterations = 0;
 
 struct filter_in_thread_info
 {
@@ -23,7 +23,7 @@ void worker()
 //    filter_in_thread_info fi = {.pid = std::this_thread::get_id()};
 //    ProfilerOptions po = {.filter_in_thread = filter_in_thread, .filter_in_thread_arg = &fi };
 //    ProfilerStartWithOptions("cpu-prof", &po);
-    while (g_run && (++iterations < 1000000))
+    while (g_run && (++g_iterations < 1000000))
     {
       //  g_mtx.lock();
         g_surface.selection_process_for_node();
