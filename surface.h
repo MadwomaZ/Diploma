@@ -34,6 +34,7 @@ public:
     //отношение количества занятых частиц к общему количеству свободных мест в момент времени из all_time
     QVector<double> concentration;
     enum host_state {free_place = 0, substance1 = 1, substance2 = 2, substance3, do_not_use = 9};
+    enum lateral {no_lateral = 0, first = 1, second}; //{без латеральных, с первыми соседями, со вторыми соседями}
     Surface();
     ~Surface();
     std::vector<std::vector<host_state> > getStates();

@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-Surface g_surface(100, 100);
+Surface g_surface(50, 50);
 //std::mutex g_mtx;
 
 void MainWindow::okClickBtn()
@@ -64,6 +64,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->v20->setText(ui->v20->text() + QString::number(g_surface.get_element_by_common_index(0)->V_2_0));
     ui->v21->setText(ui->v21->text() + QString::number(g_surface.get_element_by_common_index(0)->V_2_1));
     ui->v22->setText(ui->v22->text() + QString::number(g_surface.get_element_by_common_index(0)->V_2_2));
+    ui->e0 ->setText(ui->e0 ->text() + QString::number(g_surface.get_element_by_common_index(0)->E_0));
+    ui->e01->setText(ui->e01->text() + QString::number(g_surface.get_element_by_common_index(0)->E_0_1));
+    ui->e02->setText(ui->e02->text() + QString::number(g_surface.get_element_by_common_index(0)->E_0_2));
+    ui->e10->setText(ui->e10->text() + QString::number(g_surface.get_element_by_common_index(0)->E_1_0));
+    ui->e11->setText(ui->e11->text() + QString::number(g_surface.get_element_by_common_index(0)->E_1_1));
+    ui->e12->setText(ui->e12->text() + QString::number(g_surface.get_element_by_common_index(0)->E_1_2));
+    ui->e20->setText(ui->e20->text() + QString::number(g_surface.get_element_by_common_index(0)->E_2_0));
+    ui->e21->setText(ui->e21->text() + QString::number(g_surface.get_element_by_common_index(0)->E_2_1));
+    ui->e22->setText(ui->e22->text() + QString::number(g_surface.get_element_by_common_index(0)->E_2_2));
     ui->widget->layout()->addWidget(wgt);
     ui->graph_adsorption->clearGraphs();
     ui->graph_adsorption->addGraph();

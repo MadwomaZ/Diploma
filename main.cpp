@@ -23,6 +23,7 @@ void worker()
 //    filter_in_thread_info fi = {.pid = std::this_thread::get_id()};
 //    ProfilerOptions po = {.filter_in_thread = filter_in_thread, .filter_in_thread_arg = &fi };
 //    ProfilerStartWithOptions("cpu-prof", &po);
+//    g_surface.initial_distribution(1089, Surface::substance1);
     while (g_run && (++g_iterations < 1000000))
     {
       //  g_mtx.lock();

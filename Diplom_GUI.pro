@@ -29,6 +29,8 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
+QMAKE_CXXFLAGS += -std=c++11
+
 DISTFILES += \
     ../Diplom_model_poverchnosty_oop/node.h.gch
 

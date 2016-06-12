@@ -6,7 +6,7 @@ QPaintWidget::QPaintWidget(Surface *s_, QWidget *parent) :
     connect(&timer, SIGNAL(timeout()), this, SLOT(updateSurface()));
 //    connect(&stage, SIGNAL(changevalue()), this, SLOT()
 //    parent->connect(&stage, SIGNAL(timer.timeout()), this, SLOT(updateSurface());
-    timer.start(200);
+    timer.start(0);
 }
 
 #define POINT_GAP 3.0
