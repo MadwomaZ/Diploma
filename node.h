@@ -13,23 +13,20 @@ private:
     unsigned int x_index = 0;
     unsigned int y_index = 0;
 public:
-    static constexpr double k_adsorpion = 1e-1;
+    static constexpr double k_adsorpion = 1e0;
     static constexpr double k_desorpion = 100; //not used
     static constexpr double k_migration = 1000;
 private:
     double v_adsorpion = 0;
     double v_desorpion = 0;
     double v_migration_all = 0;
-//    double v_migration_up = 0;
-//    double v_migration_left = 0;
-//    double v_migration_right = 0;
-    double v_migration[3] = {0, };
+    double v_migration[3] = {0, };//{right, left, up}
     double v_summ = 0;
 public:
     //Чем больше Е, тем сложнее оторваться частице
     static constexpr double E_0 = 0.5;
-    static constexpr double E_0_1 = 0.2;
-    static constexpr double E_0_2 = 0.1;
+    static constexpr double E_0_1 = 0.5;
+    static constexpr double E_0_2 = 0.3;
     static constexpr double E_1_0 = 2.8;
     static constexpr double E_1_1 = 2.5;
     static constexpr double E_1_2 = 2;
@@ -51,9 +48,14 @@ public:
     static constexpr double V_2_1 = k_migration * exp((-1 * E_2_1)/RT);
     static constexpr double V_2_2 = k_migration * exp((-1 * E_2_2)/RT);
 private:
-    double V_0_s[3] = {V_0, V_0_1, V_0_2};
-    double V_1_s[3] = {V_1_0, V_1_1, V_1_2};
-    double V_2_s[3] = {V_2_0, V_2_1, V_2_2};
+    double V_first[3][3] = {{V_0  , V_0_1, V_0_2},//[prev][next]
+                            {V_1_0, V_1_1, V_1_2},
+                            {V_2_0, V_2_1, V_2_2}};
+    double V_second[5][5] = {{0.5/2, 0.4/2, 0.3/2, 0.2/2, 0.1/2}, //[prev][next]
+                             {2.6/2, 1.8/2, 1.2/2, 0.8/2, 0.6/2},
+                             {3.9/2, 3.2/2, 2.0/2, 1.6/2, 1.0/2},
+                             {4.4/2, 3.7/2, 2.5/2, 2.1/2, 1.5/2},
+                             {4.9/2, 4.2/2, 3.0/2, 2.6/2, 2.0/2}};
     double delta_t_j = 0; //время пребывания ячейки в текущем состоянии
     std::vector <Node *> first_neighbors;
     std::vector <Node *> second_neighbors;

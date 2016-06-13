@@ -1,7 +1,5 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
-//#include <mutex>
 #include <QMainWindow>
 #include <QAbstractButton>
 #include <QDebug>
@@ -9,13 +7,10 @@
 #include <QFileDialog>
 #include <QMovie>
 #include <QGraphicsObject>
-//#include <QPainter>
 #include "qpaintwidget.h"
 #include <surface.h>
 
 extern Surface g_surface;
-//extern unsigned int iterations;
-//extern std::mutex g_mtx;
 
 namespace Ui {
 class MainWindow;
@@ -24,27 +19,18 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    //    QPixmap * gr = new QPixmap;
-    //    QMovie * move = new QMovie(qobject_cast() );
-    //    QObject obj = new
     QTimer *timer;
 public:
     void okClickBtn();
     void SaveClickBtn();
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
     void updateGraph();
-
 private:
     Ui::MainWindow *ui;
     QPaintWidget *wgt;
-
-    //    unsigned int current_iter = wgt->getStage();
-signals:
-
 };
 
 #endif // MAINWINDOW_H

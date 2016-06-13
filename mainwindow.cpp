@@ -1,7 +1,9 @@
 #include "mainwindow.h"
+#include <QDesktopWidget>
+#include <QScreen>
 #include "ui_mainwindow.h"
 
-Surface g_surface(50, 50);
+Surface g_surface(100, 100);
 //std::mutex g_mtx;
 
 void MainWindow::okClickBtn()
@@ -118,11 +120,46 @@ void MainWindow::updateGraph()
     ui->iterations->setText(QString::number(g_iterations));
 //    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
 //    ui->graph_adsorption->xAxis->setRange(0, *(g_surface.all_time.end() - 1));
-//    ui->concentration->setText(QString::number(*(g_surface.concentration.end() - 1)));
+    ui->concentration->setText(QString::number(*(g_surface.concentration.end() - 1)));
 //    ui->all_time->setText(QString::number(*(g_surface.all_time.end() - 1)));
     if (g_iterations == 1e6 || *(g_surface.concentration.end() - 1) >= 1)
     {
         timer->stop();
     }
-//    ui->graph_adsorption->replot();
+    QString file_name = QString::number(g_surface.get_number_of_nodes_in_x()) +
+                        "x" + QString::number(g_surface.get_number_of_nodes_in_x()) +
+                        "_ad-" + QString::number(g_surface.get_element_in_surface(0, 0)->k_adsorpion) +
+                        "_mig-" + QString::number(g_surface.get_element_in_surface(0, 0)->k_migration) +
+                        "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_0) +
+                        "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_0_1) +
+                        "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_0_2) +
+                        "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_1_0) +
+                        "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_1_1) +
+                        "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_1_2) +
+                        "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_2_0) +
+                        "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_2_1) +
+                        "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_2_2);
+
+
+    if (!QFile::exists(file_name + "_10percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.1) == 0.10))
+    {
+        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+        pic.save(file_name + "_10percent", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_30percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.3) == 0.30))
+    {
+        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+        pic.save(file_name + "_30percent", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_50percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.5) == 0.50))
+    {
+        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+        pic.save(file_name + "_50percent", "PNG");
+    }
+
 }
