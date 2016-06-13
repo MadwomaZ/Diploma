@@ -144,22 +144,40 @@ void MainWindow::updateGraph()
     if (!QFile::exists(file_name + "_10percent") &&
        (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.1) == 0.10))
     {
-        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+        QPixmap pic = ui->general_tab->grab();//->grabWindow(ui->general_tab->winId());
         pic.save(file_name + "_10percent", "PNG");
+        std::cout << "10\n";
     }
 
     if (!QFile::exists(file_name + "_30percent") &&
        (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.3) == 0.30))
     {
-        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+//        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+        QPixmap pic = ui->general_tab->grab();
         pic.save(file_name + "_30percent", "PNG");
     }
 
     if (!QFile::exists(file_name + "_50percent") &&
        (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.5) == 0.50))
     {
-        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+//        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+        QPixmap pic = ui->general_tab->grab();
         pic.save(file_name + "_50percent", "PNG");
     }
 
+    if (!QFile::exists(file_name + "_70percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.7) == 0.70))
+    {
+//        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+        QPixmap pic = ui->general_tab->grab();
+        pic.save(file_name + "_70percent", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_90percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.9) == 0.90))
+    {
+//        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
+        QPixmap pic = ui->general_tab->grab();
+        pic.save(file_name + "_90percent", "PNG");
+    }
 }
