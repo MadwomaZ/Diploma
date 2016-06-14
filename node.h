@@ -13,9 +13,9 @@ private:
     unsigned int x_index = 0;
     unsigned int y_index = 0;
 public:
-    static constexpr double k_adsorpion = 1e-1;
+    static constexpr double k_adsorpion = 1;
     static constexpr double k_desorpion = 100; //not used
-    static constexpr double k_migration = 1000;
+    static constexpr double k_migration = 10;
 private:
     double v_adsorpion = 0;
     double v_desorpion = 0;
@@ -24,15 +24,15 @@ private:
     double v_summ = 0;
 public:
     //Чем больше Е, тем сложнее оторваться частице
-    static constexpr double E_0 = 0.5;
-    static constexpr double E_0_1 = 1;
-    static constexpr double E_0_2 = 1;
-    static constexpr double E_1_0 = 1.3;
-    static constexpr double E_1_1 = 1.3;
-    static constexpr double E_1_2 = 1.3;
-    static constexpr double E_2_0 = 2.6;
-    static constexpr double E_2_1 = 2.6;
-    static constexpr double E_2_2 = 2.6;
+    static constexpr double E_0 = 0.05;
+    static constexpr double E_0_1 = 0.2;
+    static constexpr double E_0_2 = 0.1;
+    static constexpr double E_1_0 = 0.5;
+    static constexpr double E_1_1 = 1.8;
+    static constexpr double E_1_2 = 1.2;
+    static constexpr double E_2_0 = 3.9;
+    static constexpr double E_2_1 = 3.2;
+    static constexpr double E_2_2 = 2.0;
 private:
     static const int temperature = 1273;//K = 900C
     static constexpr double R = 8.6173303e-5; // 8.661734e-5;//Эв/К

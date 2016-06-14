@@ -30,11 +30,12 @@ void Node::velocity_calculation () //Эта функция для расчета
         v_adsorpion = 0;
     else
         v_adsorpion = k_adsorpion;
-//    unsigned int lateral = 0;
+//    unsigned int lateral = 1;
 //    if (lateral == 0)
 //    {
-
+//        v_migration_all = k_migration;
 //    }
+//    else if (lateral == 1)
     unsigned int num_first_neighbors_current_node = 0;//количество занятых мест среди первых соседей
     if (get_node_state() != Surface::do_not_use && \
             get_node_state() != Surface::free_place)
@@ -48,6 +49,7 @@ void Node::velocity_calculation () //Эта функция для расчета
                 }
             }
     }
+    unsigned int num_second_neighbors_current_node[3] = {0, };//количество занятых мест среди вторых соседей
 
 //    cout << "V_ads = " << v_adsorpion << endl;
 //    v_desorpion = k_desorpion * num_particles; // = 0

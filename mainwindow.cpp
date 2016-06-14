@@ -3,7 +3,7 @@
 #include <QScreen>
 #include "ui_mainwindow.h"
 
-Surface g_surface(100, 100);
+Surface g_surface(150, 150);
 //std::mutex g_mtx;
 
 void MainWindow::okClickBtn()
@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     wgt = new QPaintWidget(&g_surface, this);
     timer = new QTimer(this);
     connect(timer, SIGNAL( timeout() ), this, SLOT(updateGraph()) );
-    timer->start(0);
+    timer->start(100);
 //    qDebug() << ui->centralWidget->layout();
 //    ui->horizontalLayout->addWidget(wgt);
 //    ui->label_2->setText(QString::number(g_surface.get_all_free_nodes()));
@@ -83,16 +83,47 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graph_adsorption->yAxis->setRange(0, 1.05);
     ui->graph_adsorption->yAxis->setAutoTickStep(false);
     ui->graph_adsorption->yAxis->setTickStep(0.1);
-//    ui->graph_adsorption->xAxis->setRange(0, 10);
+    ui->graph_adsorption->xAxis->setRange(0, 10);
     ui->graph_adsorption->xAxis->setAutoTickStep(false);
     ui->graph_adsorption->xAxis->setTickStep(1);
     ui->graph_adsorption->yAxis->setLabel("Концентрация");
     ui->graph_adsorption->xAxis->setLabel("Время");
     ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
+    parce_file_of_all_time();
+    parce_file_of_concentration();
+
+    ui->graph_adsorption->addGraph();
+    ui->graph_adsorption->graph(1)->setPen(QPen(Qt::red));
+    ui->graph_adsorption->graph(1)->setData(all_time, concentration);
+    ui->graph_adsorption->replot();
 //    ui->xEdit->setText(QString::number(90));
 
 //    wgt->show();
-//    ui->centralWidget->layout()->addWidget(wgt);
+    //    ui->centralWidget->layout()->addWidget(wgt);
+}
+
+void MainWindow::parce_file_of_all_time()
+{
+    std::ifstream file("Graph_ads_all_time.txt");
+    double tmp = 0;
+    while (file.good())
+    {
+        file >> tmp;
+        all_time.push_back(tmp);
+//        std::cout << "time = " << *(all_time.end() - 1) << std::endl;
+    }
+}
+
+void MainWindow::parce_file_of_concentration()
+{
+    std::ifstream file("Graph_ads_concentration.txt");
+    double tmp = 0;
+    while (file.good())
+    {
+        file >> tmp;
+        concentration.push_back(tmp);
+//        std::cout << "conc = " << *(concentration.end() - 1) << std::endl;
+    }
 }
 
 MainWindow::~MainWindow()
@@ -118,10 +149,12 @@ void MainWindow::on_buttonBox_clicked(QAbstractButton *button)
 void MainWindow::updateGraph()
 {
     ui->iterations->setText(QString::number(g_iterations));
-//    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
-//    ui->graph_adsorption->xAxis->setRange(0, *(g_surface.all_time.end() - 1));
+    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
+    ui->graph_adsorption->xAxis->setRange(0, *(g_surface.all_time.end() - 1));
     ui->concentration->setText(QString::number(*(g_surface.concentration.end() - 1)));
-//    ui->all_time->setText(QString::number(*(g_surface.all_time.end() - 1)));
+    ui->all_time->setText(QString::number(*(g_surface.all_time.end() - 1)));
+//    ui->graph_adsorption->graph(1)->setData(all_time, concentration);
+    ui->graph_adsorption->replot();
     if (g_iterations == 1e6 || *(g_surface.concentration.end() - 1) >= 1)
     {
         timer->stop();
@@ -140,44 +173,166 @@ void MainWindow::updateGraph()
                         "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_2_1) +
                         "_" + QString::number(g_surface.get_element_in_surface(0, 0)->E_2_2);
 
+    //Это все блять говно-код, который нужно оптимизировать
+    if (!QFile::exists(file_name + "_5percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.05) == 0.05))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_5percent", "PNG");
+        graph.save(file_name + "_5percent_graph", "PNG");
+    }
 
     if (!QFile::exists(file_name + "_10percent") &&
        (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.1) == 0.10))
     {
-        QPixmap pic = ui->general_tab->grab();//->grabWindow(ui->general_tab->winId());
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
         pic.save(file_name + "_10percent", "PNG");
-        std::cout << "10\n";
+        graph.save(file_name + "_10percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_15percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.15) == 0.15))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_15percent", "PNG");
+        graph.save(file_name + "_15percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_20percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.2) == 0.20))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_20percent", "PNG");
+        graph.save(file_name + "_20percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_25percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.25) == 0.25))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_25percent", "PNG");
+        graph.save(file_name + "_25percent_graph", "PNG");
     }
 
     if (!QFile::exists(file_name + "_30percent") &&
        (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.3) == 0.30))
     {
-//        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
         QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
         pic.save(file_name + "_30percent", "PNG");
+        graph.save(file_name + "_30percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_35percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.35) == 0.35))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_35percent", "PNG");
+        graph.save(file_name + "_35percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_40percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.4) == 0.40))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_40percent", "PNG");
+        graph.save(file_name + "_40percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_45percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.45) == 0.45))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_45percent", "PNG");
+        graph.save(file_name + "_45percent_graph", "PNG");
     }
 
     if (!QFile::exists(file_name + "_50percent") &&
        (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.5) == 0.50))
     {
-//        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
         QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
         pic.save(file_name + "_50percent", "PNG");
+        graph.save(file_name + "_50percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_55percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.55) == 0.55))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_55percent", "PNG");
+        graph.save(file_name + "_55percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_60percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.6) == 0.60))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_60percent", "PNG");
+        graph.save(file_name + "_60percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_65percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.65) == 0.65))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_65percent", "PNG");
+        graph.save(file_name + "_65percent_graph", "PNG");
     }
 
     if (!QFile::exists(file_name + "_70percent") &&
        (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.7) == 0.70))
     {
-//        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
         QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
         pic.save(file_name + "_70percent", "PNG");
+        graph.save(file_name + "_70percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_75percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.75) == 0.75))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_75percent", "PNG");
+        graph.save(file_name + "_75percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_80percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.8) == 0.80))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_80percent", "PNG");
+        graph.save(file_name + "_80percent_graph", "PNG");
+    }
+
+    if (!QFile::exists(file_name + "_85percent") &&
+       (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.85) == 0.85))
+    {
+        QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
+        pic.save(file_name + "_85percent", "PNG");
+        graph.save(file_name + "_85percent_graph", "PNG");
     }
 
     if (!QFile::exists(file_name + "_90percent") &&
        (*(g_surface.concentration.end() - 1) - fmod((*(g_surface.concentration.end() - 1)),  0.9) == 0.90))
     {
-//        QPixmap pic = QApplication::primaryScreen()->grabWindow(ui->general_tab->winId());
         QPixmap pic = ui->general_tab->grab();
+        QPixmap graph = ui->adsorption_tab->grab();
         pic.save(file_name + "_90percent", "PNG");
+        graph.save(file_name + "_90percent_graph", "PNG");
     }
 }

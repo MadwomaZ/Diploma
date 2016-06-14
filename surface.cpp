@@ -305,6 +305,22 @@ void Surface::initial_distribution(unsigned int amount_of_particles, Surface::ho
 
 }
 
+void Surface::initial_distribution_square()
+{
+    size_t x_min = number_of_nodes_in_x/3;
+    size_t x_max = x_min + 10;
+    size_t y_min = number_of_nodes_in_y/3;
+    size_t y_max = y_min + 10;
+    for (size_t i = y_min; i < y_max; i++)
+    {
+        for (size_t j = x_min; j < x_max; j++)
+        {
+            get_element_in_surface(i,j)->adsorption(substance1);
+        }
+    }
+//    adsorption(substance1);
+}
+
 void Surface::migration()
 {
 //    cout << "Migration" << endl;

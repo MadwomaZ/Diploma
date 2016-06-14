@@ -61,6 +61,7 @@ public:
     void adsorption (host_state new_state);
     void desorption ();
     void initial_distribution (unsigned int amount_of_particles, host_state new_state);
+    void initial_distribution_square ();
     void migration ();
     void velocity_calculation();
     void selection_process_for_node ();
