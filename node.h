@@ -13,9 +13,9 @@ private:
     unsigned int x_index = 0;
     unsigned int y_index = 0;
 public:
-    static constexpr double k_adsorpion = 1;
+    static constexpr double k_adsorpion = 1000;
     static constexpr double k_desorpion = 100; //not used
-    static constexpr double k_migration = 10;
+    static constexpr double k_migration = 1;
 private:
     double v_adsorpion = 0;
     double v_desorpion = 0;

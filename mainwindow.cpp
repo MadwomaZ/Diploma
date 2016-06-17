@@ -96,10 +96,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graph_adsorption->graph(1)->setPen(QPen(Qt::red));
     ui->graph_adsorption->graph(1)->setData(all_time, concentration);
     ui->graph_adsorption->replot();
-//    ui->xEdit->setText(QString::number(90));
-
-//    wgt->show();
-    //    ui->centralWidget->layout()->addWidget(wgt);
 }
 
 void MainWindow::parce_file_of_all_time()
@@ -153,7 +149,6 @@ void MainWindow::updateGraph()
     ui->graph_adsorption->xAxis->setRange(0, *(g_surface.all_time.end() - 1));
     ui->concentration->setText(QString::number(*(g_surface.concentration.end() - 1)));
     ui->all_time->setText(QString::number(*(g_surface.all_time.end() - 1)));
-//    ui->graph_adsorption->graph(1)->setData(all_time, concentration);
     ui->graph_adsorption->replot();
     if (g_iterations == 1e6 || *(g_surface.concentration.end() - 1) >= 1)
     {

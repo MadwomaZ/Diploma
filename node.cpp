@@ -30,12 +30,8 @@ void Node::velocity_calculation () //Эта функция для расчета
         v_adsorpion = 0;
     else
         v_adsorpion = k_adsorpion;
-//    unsigned int lateral = 1;
-//    if (lateral == 0)
-//    {
-//        v_migration_all = k_migration;
-//    }
-//    else if (lateral == 1)
+    unsigned int lateral = 2;
+
     unsigned int num_first_neighbors_current_node = 0;//количество занятых мест среди первых соседей
     if (get_node_state() != Surface::do_not_use && \
             get_node_state() != Surface::free_place)
@@ -49,7 +45,13 @@ void Node::velocity_calculation () //Эта функция для расчета
                 }
             }
     }
-    unsigned int num_second_neighbors_current_node[3] = {0, };//количество занятых мест среди вторых соседей
+//    unsigned int num_second_neighbors_current_node_right = 0;//количество занятых мест среди вторых соседей для прыжка вправо
+//    unsigned int num_second_neighbors_current_node_left = 0;
+//    unsigned int num_second_neighbors_current_node_up = 0;
+
+    unsigned int num_second_neighbors_next_nodes[3] = {0, };//количество занятых мест среди вторых соседей для прыжка вправо
+//    unsigned int num_second_neighbors_next_node_left = 0;
+//    unsigned int num_second_neighbors_next_node_up = 0;
 
 //    cout << "V_ads = " << v_adsorpion << endl;
 //    v_desorpion = k_desorpion * num_particles; // = 0
@@ -68,32 +70,94 @@ void Node::velocity_calculation () //Эта функция для расчета
     }
     else
     {
-        //Считаем количество занятых соседей
-        for (size_t i = 0; i < 3; i++)
+        if (lateral == 0)
         {
-            for (size_t f = 0; f < 3; f++)
+            v_migration_all = k_migration;
+        }
+        else
+        {
+            //Считаем количество занятых соседей
+            for (size_t i = 0; i < 3; i++)
             {
-                if (get_first_neighbors()[i]->get_first_neighbors()[f]->get_node_state() != Surface::free_place &&
-                        get_first_neighbors()[i]->get_first_neighbors()[f]->get_node_state() != Surface::do_not_use)
+                for (size_t f = 0; f < 3; f++)
                 {
-                    if (get_first_neighbors()[i]->get_first_neighbors()[f]->get_x_index() != get_x_index() &&
-                            get_first_neighbors()[i]->get_first_neighbors()[f]->get_y_index() != get_y_index())//исключаем текущую ноду
+                    if (get_first_neighbors()[i]->get_first_neighbors()[f]->get_node_state() != Surface::free_place &&
+                            get_first_neighbors()[i]->get_first_neighbors()[f]->get_node_state() != Surface::do_not_use)
                     {
-                        num_first_neighbors_next_nodes[i]++;
+                        if (get_first_neighbors()[i]->get_first_neighbors()[f]->get_x_index() != get_x_index() &&
+                                get_first_neighbors()[i]->get_first_neighbors()[f]->get_y_index() != get_y_index())//исключаем текущую ноду
+                        {
+                            num_first_neighbors_next_nodes[i]++;
+                        }
                     }
                 }
             }
-        }
-        for (size_t i = 0; i < 3; i++)
-        {
-            if (get_first_neighbors()[i]->get_node_state() != Surface::free_place)
+
+            for (size_t i = 0; i < 3; i++)
             {
-                v_migration[i] = 0;
+                if (get_first_neighbors()[i]->get_node_state() != Surface::free_place)
+                {
+                    v_migration[i] = 0;
+                }
+                else
+                {
+                    assert(num_first_neighbors_next_nodes[i] <= 2);
+                    v_migration[i] = this->V_first[num_first_neighbors_current_node][num_first_neighbors_next_nodes[i]];
+                }
             }
-            else
+            if (lateral == 2)
             {
-                assert(num_first_neighbors_next_nodes[i] <= 2);
-                v_migration[i] = this->V_first[num_first_neighbors_current_node][num_first_neighbors_next_nodes[i]];
+//                cout << "second lateral" << endl;
+                //ааааааа дальше сложна!!!!
+                for (size_t n = 0; n < 3; n++) //по первым соседям текущей право лево верх - все возможные прыжки
+                {
+                    for (size_t f = 0; f < 3; f++) //у них смотрим первых соседей право лево верх
+                    {
+                        if (get_first_neighbors()[n]->get_first_neighbors()[f]->get_x_index() != get_x_index() &&
+                            get_first_neighbors()[n]->get_first_neighbors()[f]->get_y_index() != get_y_index())//исключаем текущую ноду
+                        {
+                            for (size_t s = 0; s < 3; s++)
+                            {
+                                if (get_first_neighbors()[n]->get_first_neighbors()[f]->get_first_neighbors()[s]->get_x_index()
+                                        != get_first_neighbors()[n]->get_x_index() &&
+                                    get_first_neighbors()[n]->get_first_neighbors()[f]->get_first_neighbors()[s]->get_y_index()
+                                        != get_first_neighbors()[n]->get_y_index())
+                                {
+                                    if (get_first_neighbors()[n]->get_first_neighbors()[f]->get_first_neighbors()[s]->get_node_state() != Surface::free_place &&
+                                        get_first_neighbors()[n]->get_first_neighbors()[f]->get_first_neighbors()[s]->get_node_state() != Surface::do_not_use)
+                                    {
+                                        num_second_neighbors_next_nodes[n]++;
+//                                        cout << num_second_neighbors_next_nodes[n] << endl;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            cout << "[" << x_index << "][" << y_index << "] state = " << its_node_state << endl;
+            cout << "num_first_neighbors_right = " << num_first_neighbors_next_nodes[0] << endl;
+            cout << "num_first_neighbors_left = " << num_first_neighbors_next_nodes[1] << endl;
+            cout << "num_first_neighbors_up = " << num_first_neighbors_next_nodes[2] << endl;
+            cout << "num_second_next_nodes_right = " << num_second_neighbors_next_nodes[0] << endl;
+            cout << "num_second_next_nodes_left = " << num_second_neighbors_next_nodes[1] << endl;
+            cout << "num_second_next_nodes_up = " << num_second_neighbors_next_nodes[2] << endl;
+            for (size_t i = 0; i < 3; i++)
+            {
+                cout << "[" << get_first_neighbors()[i]->get_x_index() << "][" << get_first_neighbors()[i]->get_y_index()
+                     << "] = " << get_first_neighbors()[i]->get_node_state() << " :" <<endl;
+                for (size_t j = 0; j < 3; j++)
+                {
+                    cout << "\t[" << get_first_neighbors()[i]->get_first_neighbors()[j]->get_x_index() << "]["
+                         << get_first_neighbors()[i]->get_first_neighbors()[j]->get_y_index() << "] = "
+                         << get_first_neighbors()[i]->get_first_neighbors()[j]->get_node_state() << endl;
+                    for (size_t s = 0; s < 3; s++)
+                    {
+                        cout << "\t\t[" << get_first_neighbors()[i]->get_first_neighbors()[j]->get_first_neighbors()[s]->get_x_index() << "]["
+                             << get_first_neighbors()[i]->get_first_neighbors()[j]->get_first_neighbors()[s]->get_y_index() << "] = "
+                             << get_first_neighbors()[i]->get_first_neighbors()[j]->get_first_neighbors()[s]->get_node_state() << endl;
+                    }
+                }
             }
         }
         v_migration_all = v_migration[0] + v_migration[1] + v_migration[2];
