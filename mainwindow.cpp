@@ -3,7 +3,7 @@
 #include <QScreen>
 #include "ui_mainwindow.h"
 
-Surface g_surface(150, 150);
+Surface g_surface(100, 100);
 //std::mutex g_mtx;
 
 void MainWindow::okClickBtn()
@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     wgt = new QPaintWidget(&g_surface, this);
     timer = new QTimer(this);
     connect(timer, SIGNAL( timeout() ), this, SLOT(updateGraph()) );
-    timer->start(100);
+    timer->start(200);
 //    qDebug() << ui->centralWidget->layout();
 //    ui->horizontalLayout->addWidget(wgt);
 //    ui->label_2->setText(QString::number(g_surface.get_all_free_nodes()));
@@ -76,26 +76,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->e21->setText(ui->e21->text() + QString::number(g_surface.get_element_by_common_index(0)->E_2_1));
     ui->e22->setText(ui->e22->text() + QString::number(g_surface.get_element_by_common_index(0)->E_2_2));
     ui->widget->layout()->addWidget(wgt);
-    ui->graph_adsorption->clearGraphs();
-    ui->graph_adsorption->addGraph();
-    ui->graph_adsorption->graph(0)->setPen(QPen(Qt::blue));
-    ui->graph_adsorption->graph(0)->setName("График адсорбции");
-    ui->graph_adsorption->yAxis->setRange(0, 1.05);
-    ui->graph_adsorption->yAxis->setAutoTickStep(false);
-    ui->graph_adsorption->yAxis->setTickStep(0.1);
-    ui->graph_adsorption->xAxis->setRange(0, 10);
-    ui->graph_adsorption->xAxis->setAutoTickStep(false);
-    ui->graph_adsorption->xAxis->setTickStep(1);
-    ui->graph_adsorption->yAxis->setLabel("Концентрация");
-    ui->graph_adsorption->xAxis->setLabel("Время");
-    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
-    parce_file_of_all_time();
-    parce_file_of_concentration();
+//    ui->graph_adsorption->clearGraphs();
+//    ui->graph_adsorption->addGraph();
+//    ui->graph_adsorption->graph(0)->setPen(QPen(Qt::blue));
+//    ui->graph_adsorption->graph(0)->setName("График адсорбции");
+//    ui->graph_adsorption->yAxis->setRange(0, 1.05);
+//    ui->graph_adsorption->yAxis->setAutoTickStep(false);
+//    ui->graph_adsorption->yAxis->setTickStep(0.1);
+//    ui->graph_adsorption->xAxis->setRange(0, 10);
+//    ui->graph_adsorption->xAxis->setAutoTickStep(false);
+//    ui->graph_adsorption->xAxis->setTickStep(1);
+//    ui->graph_adsorption->yAxis->setLabel("Концентрация");
+//    ui->graph_adsorption->xAxis->setLabel("Время");
+//    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
+//    parce_file_of_all_time();
+//    parce_file_of_concentration();
 
-    ui->graph_adsorption->addGraph();
-    ui->graph_adsorption->graph(1)->setPen(QPen(Qt::red));
-    ui->graph_adsorption->graph(1)->setData(all_time, concentration);
-    ui->graph_adsorption->replot();
+//    ui->graph_adsorption->addGraph();
+//    ui->graph_adsorption->graph(1)->setPen(QPen(Qt::red));
+//    ui->graph_adsorption->graph(1)->setData(all_time, concentration);
+//    ui->graph_adsorption->replot();
 }
 
 void MainWindow::parce_file_of_all_time()
@@ -145,11 +145,11 @@ void MainWindow::on_buttonBox_clicked(QAbstractButton *button)
 void MainWindow::updateGraph()
 {
     ui->iterations->setText(QString::number(g_iterations));
-    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
-    ui->graph_adsorption->xAxis->setRange(0, *(g_surface.all_time.end() - 1));
+//    ui->graph_adsorption->graph(0)->setData(g_surface.all_time, g_surface.concentration);
+//    ui->graph_adsorption->xAxis->setRange(0, *(g_surface.all_time.end() - 1));
     ui->concentration->setText(QString::number(*(g_surface.concentration.end() - 1)));
     ui->all_time->setText(QString::number(*(g_surface.all_time.end() - 1)));
-    ui->graph_adsorption->replot();
+//    ui->graph_adsorption->replot();
     if (g_iterations == 1e6 || *(g_surface.concentration.end() - 1) >= 1)
     {
         timer->stop();
